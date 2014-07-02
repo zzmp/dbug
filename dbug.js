@@ -112,7 +112,7 @@ angular.module('d', []); // :)
      */
     this.addService = function(serviceName, remove) {
       var index = addedServices.indexOf(serviceName);
-      if ((remove && index === -1) || (!remove && index !== -1))
+      if ((remove && ~index) || (!remove && !~index))
         return;
 
       if (remove) addedServices.splice(index, 1);
@@ -125,7 +125,7 @@ angular.module('d', []); // :)
      */
     this.blockService = function(serviceName, remove) {
       var index = blockedServices.indexOf(serviceName);
-      if ((remove && index === -1) || (!remove && index !== -1))
+      if ((remove && ~index) || (!remove && !~index))
         return;
 
       if (remove) blockedServices.splice(index, 1);
@@ -150,12 +150,12 @@ angular.module('d', []); // :)
       if (options.secret) results = results.concat($$serviceList);
 
       angular.forEach(addedServices, function(name) {
-        if (results.indexOf(name) === -1) results.unshift(name);
+        if (!~results.indexOf(name)) results.unshift(name);
       });
 
       angular.forEach(blockedServices, function(name) {
         var index = results.indexOf(name);
-        if (index !== -1) results.splice(index, 1);
+        if (~index) results.splice(index, 1);
       });
 
       return results;
