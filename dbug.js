@@ -1,7 +1,7 @@
   /* This module is here as a placeholder for future functionality.
    * It is not actually needed (yet).
    */
-angular.module('d', []); // :)
+angular.module('dbug', []); // :)
 
 
 (function(angular) {
@@ -11,12 +11,12 @@ angular.module('d', []); // :)
    * including internal services (those beginning with `$` or `$$`).
    */
   angular.module('ng').
-    _runBlocks.unshift(['$injector', '$log', 'd', instantiateAndDecorate]); //  A
+    _runBlocks.unshift(['$injector', '$log', 'dbug', instantiateAndDecorate]); //  A
   // Every other configBlock is run here, before the first runBlock (above) // / \
   angular.module('ng').                                                     //  |
     _configBlocks.unshift(['$injector', 'invoke', [populateServiceLists]]); //  |
   angular.module('ng').                                                     //  |
-  _configBlocks.unshift(['$injector', 'invoke', [provideD]]);               //  |
+  _configBlocks.unshift(['$injector', 'invoke', [provideDbug]]);               //  |
 
 
   /* Services with closures and added functions outside of their provider
@@ -25,8 +25,8 @@ angular.module('d', []); // :)
    * `$provide.decorator` does not accomodate this, so we must manually instantiate
    * and decorate each service.
    */
-  function instantiateAndDecorate ($injector, $log, d) {
-      angular.forEach(d, function(name) {
+  function instantiateAndDecorate ($injector, $log, dbug) {
+      angular.forEach(dbug, function(name) {
         // Instantiate singleton services with the `$injector` prior to decoration.
         decorator(name, $injector.get(name), $log);
       });
@@ -64,17 +64,17 @@ angular.module('d', []); // :)
       return $delegate;
     }
 
-  // Define the `d` provider.
-  function provideD ($provide) {
-    $provide.provider('d', dProviderFn);
+  // Define the `dbug` provider.
+  function provideDbug ($provide) {
+    $provide.provider('dbug', dbugProviderFn);
   }
-  provideD.$inject = ['$provide'];
+  provideDbug.$inject = ['$provide'];
 
-  /* The `d` provider.
+  /* The `dbug` provider.
    * This provider is used to set debugging levels in a config block,
    * as well as to set or block specific services for debugging.
    */
-  function dProviderFn () {
+  function dbugProviderFn () {
     var options = {
       silent: false,
       factory: false,
@@ -139,7 +139,7 @@ angular.module('d', []); // :)
       }
       if (serviceName[1] === '$') $$serviceList.push(serviceName);
       else if (serviceName[0] === '$') $serviceList.push(serviceName);
-      else if (serviceName !== 'd') serviceList.push(serviceName);
+      else if (serviceName !== 'dbug') serviceList.push(serviceName);
     };
 
     this.$get = function() {
@@ -166,7 +166,7 @@ angular.module('d', []); // :)
    * This allows for later decoration of these services
    * without explicitly specifying their names.
    */
-  function populateServiceLists($provide, dProvider) {
+  function populateServiceLists($provide, dbugProvider) {
     $provider = $provide.provider;
     $service = $provide.service;
     $factory = $provide.factory;
@@ -179,7 +179,7 @@ angular.module('d', []); // :)
     function supportObject($delegate, factory) {
       return function(key, value) {
         delegate = function(serviceName) {
-          dProvider.addServiceToList(serviceName, factory);
+          dbugProvider.addServiceToList(serviceName, factory);
           return $delegate.apply($provide, arguments);
         };
 
@@ -194,6 +194,6 @@ angular.module('d', []); // :)
       return function(value, key) { iteratorFn(key, value); };
     }
   }
-  populateServiceLists.$inject = ['$provide', 'dProvider'];
+  populateServiceLists.$inject = ['$provide', 'dbugProvider'];
 
 }(angular) );
