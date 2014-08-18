@@ -1,0 +1,32 @@
+{
+  "name": "ng-dbug",
+  "main": "dbug.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/zzmp/dbug",
+  "authors": [
+    "zzmp <zmp@umich.edu>"
+  ],
+  "description": "Angular debugging for the confused developer.",
+  "keywords": [
+    "ng",
+    "angular",
+    "dbug",
+    "debug",
+    "service",
+    "provider",
+    "log",
+    "logger",
+    "logging"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/lib",
+    "test"
+  ],
+  "devDependencies": {
+    "angular": "~1.2.21"
+  }
+}

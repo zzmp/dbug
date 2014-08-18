@@ -1,0 +1,30 @@
+{
+  "name": "ng-dbug",
+  "version": "0.0.0",
+  "description": "Angular debugging for the confused developer.",
+  "main": "dbug.js",
+  "scripts": {
+    "test": "echo 'What a great place to contribute!'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zzmp/dbug.git"
+  },
+  "keywords": [
+    "ng",
+    "angular",
+    "dbug",
+    "debug",
+    "service",
+    "provider",
+    "log",
+    "logger",
+    "logging"
+  ],
+  "author": "Zach Pomerantz <zmp@umich.edu> (http://garabagne.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zzmp/dbug/issues"
+  },
+  "homepage": "https://github.com/zzmp/dbug"
+}
