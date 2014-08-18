@@ -1,4 +1,8 @@
 dbug
 ====
 
-Angular debugging for the confused developer.
+> Angular debugging for the confused developer.
+
+---
+
+

@@ -7,22 +7,22 @@ angular.module('dbug', []); // :)
 (function(angular) {
 
   /* The must be loaded in the reverse of the order listed here (hence, unshifting).
-   * This allows dProvider to act as a storage for and capture all registered services,
+   * This allows `dbugProvider` to act as a storage for and capture all registered services,
    * including internal services (those beginning with `$` or `$$`).
    */
   angular.module('ng').
-    _runBlocks.unshift(['$injector', '$log', 'dbug', instantiateAndDecorate]); //  A
-  // Every other configBlock is run here, before the first runBlock (above) // / \
-  angular.module('ng').                                                     //  |
-    _configBlocks.unshift(['$injector', 'invoke', [populateServiceLists]]); //  |
-  angular.module('ng').                                                     //  |
-  _configBlocks.unshift(['$injector', 'invoke', [provideDbug]]);               //  |
+    _runBlocks.unshift(['$injector', '$log', 'dbug', instantiateAndDecorate]); //  /\
+  // Every other configBlock is run here, before the first runBlock (above)    // /||\
+  angular.module('ng').                                                        //  ||
+    _configBlocks.unshift(['$injector', 'invoke', [populateServiceLists]]);    //  ||
+  angular.module('ng').                                                        //  ||
+    _configBlocks.unshift(['$injector', 'invoke', [provideDbug]]);             //  ||
 
 
   /* Services with closures and added functions outside of their provider
    * (like http.method shortcuts) must preserve those closures and functionality
    * if they are decorated.
-   * `$provide.decorator` does not accomodate this, so we must manually instantiate
+   * `$provide.decorator` does not accomodate this, so we must manually _instantiate_
    * and decorate each service.
    */
   function instantiateAndDecorate ($injector, $log, dbug) {
@@ -132,6 +132,7 @@ angular.module('dbug', []); // :)
       else blockedServices.push(serviceName);
     };
 
+    // INTERNAL FUNCTION: Add service to logging services.
     this.addServiceToList = function(serviceName, factory) {
       if (factory) {
         factoryList.push(serviceName);
@@ -145,19 +146,22 @@ angular.module('dbug', []); // :)
     this.$get = function() {
       if (options.silent) return [] ;
       var results = serviceList.slice();
-      if (options.factory) results = results.concat(factoryList);
+      if (options.factory)  results = results.concat(factoryList);
       if (options.internal) results = results.concat($serviceList);
-      if (options.secret) results = results.concat($$serviceList);
+      if (options.secret)   results = results.concat($$serviceList);
 
+      // Explicitly added services
       angular.forEach(addedServices, function(name) {
         if (!~results.indexOf(name)) results.unshift(name);
       });
 
+      // Explicitly blocked services
       angular.forEach(blockedServices, function(name) {
         var index = results.indexOf(name);
         if (~index) results.splice(index, 1);
       });
 
+      // Return list of logging services
       return results;
     };
   }
@@ -179,6 +183,7 @@ angular.module('dbug', []); // :)
     function supportObject($delegate, factory) {
       return function(key, value) {
         delegate = function(serviceName) {
+          // Intercept providers' services
           dbugProvider.addServiceToList(serviceName, factory);
           return $delegate.apply($provide, arguments);
         };
