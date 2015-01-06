@@ -2,9 +2,9 @@
   "name": "ng-dbug",
   "version": "0.0.0",
   "description": "Angular debugging for the confused developer.",
-  "main": "dbug.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo 'What a great place to contribute!'"
+    "concat": "cp -f dbug.js index.js && cat click.js >> index.js"
   },
   "repository": {
     "type": "git",
